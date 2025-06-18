@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Add Card - {{ flashcard_set.title }} - FlashForge{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="card p-6">
+        <div class="mb-6">
+            <div class="flex items-center mb-4">
+                <a href="{{ url_for('view_set', set_id=flashcard_set.id) }}" class="text-indigo-600 hover:text-indigo-800 mr-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </a>
+                <h1 class="text-3xl font-bold text-gray-900">Add New Card</h1>
+            </div>
+            <p class="text-gray-600">Add a new flashcard to "{{ flashcard_set.title }}"</p>
+        </div>
+
+        <form method="POST" class="space-y-6">
+            <div class="form-group">
+                <label for="question" class="form-label">
+                    Question *
+                </label>
+                <textarea id="question" 
+                          name="question" 
+                          required
+                          rows="4"
+                          class="form-input form-textarea"
+                          placeholder="Enter your question here...">{{ request.form.get('question', '') }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="answer" class="form-label">
+                    Answer *
+                </label>
+                <textarea id="answer" 
+                          name="answer" 
+                          required
+                          rows="4"
+                          class="form-input form-textarea"
+                          placeholder="Enter the answer here...">{{ request.form.get('answer', '') }}</textarea>
+            </div>
+
+            <div class="flex items-center justify-between pt-4">
+                <a href="{{ url_for('view_set', set_id=flashcard_set.id) }}" 
+                   class="btn btn-secondary">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Cancel
+                </a>
+                <button type="submit" class="btn">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Add Card
+                </button>
+            </div>
+        </form>
+
+        <!-- Quick Tips -->
+        <div class="mt-8 p-4 bg-blue-50 rounded-lg backdrop-filter backdrop-blur-sm">
+            <h3 class="text-sm font-medium text-blue-900 mb-2">💡 Quick Tips</h3>
+            <ul class="text-sm text-blue-800 space-y-1">
+                <li>• Keep questions clear and concise</li>
+                <li>• Use specific, detailed answers</li>
+                <li>• You can include multiple lines of text</li>
+                <li>• Add as many cards as you need to your set</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 

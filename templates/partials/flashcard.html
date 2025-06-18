@@ -1,0 +1,30 @@
+<div class="flip-card card" data-card-id="{{ card.id }}">
+    <div class="flip-card-inner">
+        <!-- Front of card -->
+        <div class="flip-card-front" onclick="flipCard(this.parentElement.parentElement)">
+            <div class="text-center">
+                <div class="text-sm font-medium mb-2 opacity-80">Question</div>
+                <div class="text-lg font-semibold">{{ card.question }}</div>
+                <div class="text-xs opacity-70 mt-4">Click to flip</div>
+            </div>
+        </div>
+        
+        <!-- Back of card -->
+        <div class="flip-card-back">
+            <div class="text-center w-full">
+                <div class="text-sm font-medium mb-2 opacity-80">Answer</div>
+                <div class="text-lg font-semibold mb-4">{{ card.answer }}</div>
+                <div class="flex justify-center space-x-2">
+                    <button onclick="flipCardBack(this)" 
+                            class="btn btn-secondary text-xs px-3 py-1">
+                        Flip Back
+                    </button>
+                    <button onclick="deleteCard({{ flashcard_set.id }}, {{ card.id }}, this)" 
+                            class="btn btn-danger text-xs px-3 py-1">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
