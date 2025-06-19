@@ -86,10 +86,18 @@ def index():
     """Home page showing all flashcard sets"""
     try:
         data = FlashcardManager.load_data()
-        return render_template('index.html', sets=data['sets'])
+        
+        # Count favorite cards
+        favorite_count = 0
+        for flashcard_set in data['sets']:
+            for card in flashcard_set['cards']:
+                if card.get('favorite', False):
+                    favorite_count += 1
+        
+        return render_template('index.html', sets=data['sets'], favorite_count=favorite_count)
     except Exception as e:
         flash(f"Error loading flashcard sets: {str(e)}", 'error')
-        return render_template('index.html', sets=[])
+        return render_template('index.html', sets=[], favorite_count=0)
 
 @app.route('/set/new', methods=['GET', 'POST'])
 def new_set():
@@ -178,6 +186,7 @@ def new_card(set_id):
                     'id': FlashcardManager.get_next_id(flashcard_set_in_data['cards']),
                     'question': question,
                     'answer': answer,
+                    'favorite': False,
                     'created_at': datetime.now().isoformat()
                 }
                 flashcard_set_in_data['cards'].append(new_card)
@@ -194,6 +203,67 @@ def new_card(set_id):
     except Exception as e:
         flash(f'Error loading flashcard set: {str(e)}', 'error')
         return redirect(url_for('index'))
+
+@app.route('/card/<int:set_id>/<int:card_id>/toggle-favorite', methods=['POST'])
+def toggle_favorite(set_id, card_id):
+    """Toggle favorite status of a card"""
+    try:
+        data = FlashcardManager.load_data()
+        
+        # Find the set and card
+        flashcard_set = None
+        target_card = None
+        
+        for set_item in data['sets']:
+            if set_item['id'] == set_id:
+                flashcard_set = set_item
+                for card in set_item['cards']:
+                    if card['id'] == card_id:
+                        target_card = card
+                        break
+                break
+        
+        if not flashcard_set or not target_card:
+            return jsonify({'success': False, 'message': 'Card not found'}), 404
+        
+        # Toggle favorite status
+        target_card['favorite'] = not target_card.get('favorite', False)
+        
+        if FlashcardManager.save_data(data):
+            return jsonify({
+                'success': True, 
+                'favorite': target_card['favorite'],
+                'message': 'Card added to favorites!' if target_card['favorite'] else 'Card removed from favorites!'
+            })
+        else:
+            return jsonify({'success': False, 'message': 'Error saving changes'}), 500
+            
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error: {str(e)}'}), 500
+
+@app.route('/favorites')
+def favorites():
+    """Display all favorite cards from all sets"""
+    try:
+        data = FlashcardManager.load_data()
+        favorite_cards = []
+        
+        # Collect all favorite cards with their set information
+        for flashcard_set in data['sets']:
+            for card in flashcard_set['cards']:
+                if card.get('favorite', False):
+                    favorite_cards.append({
+                        'card': card,
+                        'set': {
+                            'id': flashcard_set['id'],
+                            'title': flashcard_set['title']
+                        }
+                    })
+        
+        return render_template('favorites.html', favorite_cards=favorite_cards)
+    except Exception as e:
+        flash(f'Error loading favorites: {str(e)}', 'error')
+        return render_template('favorites.html', favorite_cards=[])
 
 @app.route('/set/<int:set_id>/delete', methods=['POST'])
 def delete_set(set_id):
