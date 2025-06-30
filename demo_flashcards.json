@@ -1,0 +1,628 @@
+{
+  "sets": [
+    {
+      "id": 1,
+      "title": "Basic Japanese Greetings",
+      "description": "Essential Japanese greetings and common phrases for beginners",
+      "created_at": "2024-01-15T10:30:00",
+      "cards": [
+        {
+          "id": 1,
+          "question": "Hello (Good morning)",
+          "answer": "おはようございます (Ohayou gozaimasu)",
+          "favorite": false,
+          "created_at": "2024-01-15T10:30:00"
+        },
+        {
+          "id": 2,
+          "question": "Hello (Good afternoon)",
+          "answer": "こんにちは (Konnichiwa)",
+          "favorite": false,
+          "created_at": "2024-01-15T10:30:00"
+        },
+        {
+          "id": 3,
+          "question": "Hello (Good evening)",
+          "answer": "こんばんは (Konbanwa)",
+          "favorite": false,
+          "created_at": "2024-01-15T10:30:00"
+        },
+        {
+          "id": 4,
+          "question": "Goodbye",
+          "answer": "さようなら (Sayounara)",
+          "favorite": false,
+          "created_at": "2024-01-15T10:30:00"
+        },
+        {
+          "id": 5,
+          "question": "Thank you",
+          "answer": "ありがとう (Arigatou)",
+          "favorite": true,
+          "created_at": "2024-01-15T10:30:00"
+        },
+        {
+          "id": 6,
+          "question": "You're welcome",
+          "answer": "どういたしまして (Dou itashimashite)",
+          "favorite": false,
+          "created_at": "2024-01-15T10:30:00"
+        },
+        {
+          "id": 7,
+          "question": "Excuse me / Sorry",
+          "answer": "すみません (Sumimasen)",
+          "favorite": false,
+          "created_at": "2024-01-15T10:30:00"
+        },
+        {
+          "id": 8,
+          "question": "Yes",
+          "answer": "はい (Hai)",
+          "favorite": false,
+          "created_at": "2024-01-15T10:30:00"
+        },
+        {
+          "id": 9,
+          "question": "No",
+          "answer": "いいえ (Iie)",
+          "favorite": false,
+          "created_at": "2024-01-15T10:30:00"
+        },
+        {
+          "id": 10,
+          "question": "How are you?",
+          "answer": "お元気ですか (Ogenki desu ka)",
+          "favorite": false,
+          "created_at": "2024-01-15T10:30:00"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Python Programming Basics",
+      "description": "Fundamental Python concepts and syntax for beginners",
+      "created_at": "2024-01-15T11:00:00",
+      "cards": [
+        {
+          "id": 1,
+          "question": "How do you create a variable in Python?",
+          "answer": "Simply assign a value: x = 5, name = 'John', is_valid = True",
+          "favorite": false,
+          "created_at": "2024-01-15T11:00:00"
+        },
+        {
+          "id": 2,
+          "question": "What is a list in Python?",
+          "answer": "An ordered, mutable collection of items: [1, 2, 3, 'hello']",
+          "favorite": true,
+          "created_at": "2024-01-15T11:00:00"
+        },
+        {
+          "id": 3,
+          "question": "How do you define a function?",
+          "answer": "def function_name(parameters): followed by indented code block",
+          "favorite": false,
+          "created_at": "2024-01-15T11:00:00"
+        },
+        {
+          "id": 4,
+          "question": "What is the difference between '==' and 'is'?",
+          "answer": "'==' compares values, 'is' compares object identity (memory location)",
+          "favorite": false,
+          "created_at": "2024-01-15T11:00:00"
+        },
+        {
+          "id": 5,
+          "question": "How do you handle exceptions?",
+          "answer": "try: code except ExceptionType: handle_error finally: cleanup",
+          "favorite": false,
+          "created_at": "2024-01-15T11:00:00"
+        },
+        {
+          "id": 6,
+          "question": "What is a dictionary?",
+          "answer": "Key-value pairs: {'name': 'John', 'age': 30}",
+          "favorite": false,
+          "created_at": "2024-01-15T11:00:00"
+        },
+        {
+          "id": 7,
+          "question": "How do you import a module?",
+          "answer": "import module_name or from module import specific_function",
+          "favorite": false,
+          "created_at": "2024-01-15T11:00:00"
+        },
+        {
+          "id": 8,
+          "question": "What is a tuple?",
+          "answer": "An ordered, immutable collection: (1, 2, 3, 'hello')",
+          "favorite": false,
+          "created_at": "2024-01-15T11:00:00"
+        },
+        {
+          "id": 9,
+          "question": "How do you create a class?",
+          "answer": "class ClassName: followed by methods and attributes",
+          "favorite": false,
+          "created_at": "2024-01-15T11:00:00"
+        },
+        {
+          "id": 10,
+          "question": "What is list comprehension?",
+          "answer": "A concise way to create lists: [x**2 for x in range(10)]",
+          "favorite": true,
+          "created_at": "2024-01-15T11:00:00"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Famous Birthdays",
+      "description": "Birthdays of famous people throughout history",
+      "created_at": "2024-01-15T11:30:00",
+      "cards": [
+        {
+          "id": 1,
+          "question": "When was Albert Einstein born?",
+          "answer": "March 14, 1879",
+          "favorite": false,
+          "created_at": "2024-01-15T11:30:00"
+        },
+        {
+          "id": 2,
+          "question": "When was William Shakespeare born?",
+          "answer": "April 23, 1564",
+          "favorite": false,
+          "created_at": "2024-01-15T11:30:00"
+        },
+        {
+          "id": 3,
+          "question": "When was Leonardo da Vinci born?",
+          "answer": "April 15, 1452",
+          "favorite": true,
+          "created_at": "2024-01-15T11:30:00"
+        },
+        {
+          "id": 4,
+          "question": "When was Marie Curie born?",
+          "answer": "November 7, 1867",
+          "favorite": false,
+          "created_at": "2024-01-15T11:30:00"
+        },
+        {
+          "id": 5,
+          "question": "When was Martin Luther King Jr. born?",
+          "answer": "January 15, 1929",
+          "favorite": false,
+          "created_at": "2024-01-15T11:30:00"
+        },
+        {
+          "id": 6,
+          "question": "When was Steve Jobs born?",
+          "answer": "February 24, 1955",
+          "favorite": false,
+          "created_at": "2024-01-15T11:30:00"
+        },
+        {
+          "id": 7,
+          "question": "When was Queen Elizabeth II born?",
+          "answer": "April 21, 1926",
+          "favorite": false,
+          "created_at": "2024-01-15T11:30:00"
+        },
+        {
+          "id": 8,
+          "question": "When was Vincent van Gogh born?",
+          "answer": "March 30, 1853",
+          "favorite": false,
+          "created_at": "2024-01-15T11:30:00"
+        },
+        {
+          "id": 9,
+          "question": "When was Mahatma Gandhi born?",
+          "answer": "October 2, 1869",
+          "favorite": false,
+          "created_at": "2024-01-15T11:30:00"
+        },
+        {
+          "id": 10,
+          "question": "When was Nikola Tesla born?",
+          "answer": "July 10, 1856",
+          "favorite": true,
+          "created_at": "2024-01-15T11:30:00"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "World Capitals",
+      "description": "Capital cities of countries around the world",
+      "created_at": "2024-01-15T12:00:00",
+      "cards": [
+        {
+          "id": 1,
+          "question": "What is the capital of Japan?",
+          "answer": "Tokyo",
+          "favorite": false,
+          "created_at": "2024-01-15T12:00:00"
+        },
+        {
+          "id": 2,
+          "question": "What is the capital of Australia?",
+          "answer": "Canberra",
+          "favorite": false,
+          "created_at": "2024-01-15T12:00:00"
+        },
+        {
+          "id": 3,
+          "question": "What is the capital of Brazil?",
+          "answer": "Brasília",
+          "favorite": false,
+          "created_at": "2024-01-15T12:00:00"
+        },
+        {
+          "id": 4,
+          "question": "What is the capital of Egypt?",
+          "answer": "Cairo",
+          "favorite": false,
+          "created_at": "2024-01-15T12:00:00"
+        },
+        {
+          "id": 5,
+          "question": "What is the capital of India?",
+          "answer": "New Delhi",
+          "favorite": false,
+          "created_at": "2024-01-15T12:00:00"
+        },
+        {
+          "id": 6,
+          "question": "What is the capital of South Africa?",
+          "answer": "Pretoria (executive), Cape Town (legislative), Bloemfontein (judicial)",
+          "favorite": true,
+          "created_at": "2024-01-15T12:00:00"
+        },
+        {
+          "id": 7,
+          "question": "What is the capital of Canada?",
+          "answer": "Ottawa",
+          "favorite": false,
+          "created_at": "2024-01-15T12:00:00"
+        },
+        {
+          "id": 8,
+          "question": "What is the capital of Mexico?",
+          "answer": "Mexico City",
+          "favorite": false,
+          "created_at": "2024-01-15T12:00:00"
+        },
+        {
+          "id": 9,
+          "question": "What is the capital of Russia?",
+          "answer": "Moscow",
+          "favorite": false,
+          "created_at": "2024-01-15T12:00:00"
+        },
+        {
+          "id": 10,
+          "question": "What is the capital of Argentina?",
+          "answer": "Buenos Aires",
+          "favorite": false,
+          "created_at": "2024-01-15T12:00:00"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Chemistry Elements",
+      "description": "Essential chemical elements and their properties",
+      "created_at": "2024-01-15T12:30:00",
+      "cards": [
+        {
+          "id": 1,
+          "question": "What is the chemical symbol for Hydrogen?",
+          "answer": "H",
+          "favorite": false,
+          "created_at": "2024-01-15T12:30:00"
+        },
+        {
+          "id": 2,
+          "question": "What is the chemical symbol for Oxygen?",
+          "answer": "O",
+          "favorite": false,
+          "created_at": "2024-01-15T12:30:00"
+        },
+        {
+          "id": 3,
+          "question": "What is the chemical symbol for Carbon?",
+          "answer": "C",
+          "favorite": true,
+          "created_at": "2024-01-15T12:30:00"
+        },
+        {
+          "id": 4,
+          "question": "What is the chemical symbol for Nitrogen?",
+          "answer": "N",
+          "favorite": false,
+          "created_at": "2024-01-15T12:30:00"
+        },
+        {
+          "id": 5,
+          "question": "What is the chemical symbol for Gold?",
+          "answer": "Au",
+          "favorite": false,
+          "created_at": "2024-01-15T12:30:00"
+        },
+        {
+          "id": 6,
+          "question": "What is the chemical symbol for Silver?",
+          "answer": "Ag",
+          "favorite": false,
+          "created_at": "2024-01-15T12:30:00"
+        },
+        {
+          "id": 7,
+          "question": "What is the chemical symbol for Iron?",
+          "answer": "Fe",
+          "favorite": false,
+          "created_at": "2024-01-15T12:30:00"
+        },
+        {
+          "id": 8,
+          "question": "What is the chemical symbol for Copper?",
+          "answer": "Cu",
+          "favorite": false,
+          "created_at": "2024-01-15T12:30:00"
+        },
+        {
+          "id": 9,
+          "question": "What is the chemical symbol for Sodium?",
+          "answer": "Na",
+          "favorite": false,
+          "created_at": "2024-01-15T12:30:00"
+        },
+        {
+          "id": 10,
+          "question": "What is the chemical symbol for Chlorine?",
+          "answer": "Cl",
+          "favorite": false,
+          "created_at": "2024-01-15T12:30:00"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "JavaScript Fundamentals",
+      "description": "Core JavaScript concepts and syntax",
+      "created_at": "2024-01-15T13:00:00",
+      "cards": [
+        {
+          "id": 1,
+          "question": "How do you declare a variable in JavaScript?",
+          "answer": "let, const, or var: let x = 5; const name = 'John'; var oldWay = true;",
+          "favorite": false,
+          "created_at": "2024-01-15T13:00:00"
+        },
+        {
+          "id": 2,
+          "question": "What is the difference between == and ===?",
+          "answer": "== compares values with type coercion, === compares values and types strictly",
+          "favorite": true,
+          "created_at": "2024-01-15T13:00:00"
+        },
+        {
+          "id": 3,
+          "question": "How do you create an array?",
+          "answer": "const arr = [1, 2, 3] or const arr = new Array(1, 2, 3)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:00:00"
+        },
+        {
+          "id": 4,
+          "question": "What is a callback function?",
+          "answer": "A function passed as an argument to another function, executed later",
+          "favorite": false,
+          "created_at": "2024-01-15T13:00:00"
+        },
+        {
+          "id": 5,
+          "question": "How do you handle asynchronous operations?",
+          "answer": "Promises, async/await, or callbacks",
+          "favorite": false,
+          "created_at": "2024-01-15T13:00:00"
+        },
+        {
+          "id": 6,
+          "question": "What is the DOM?",
+          "answer": "Document Object Model - a programming interface for HTML and XML documents",
+          "favorite": false,
+          "created_at": "2024-01-15T13:00:00"
+        },
+        {
+          "id": 7,
+          "question": "How do you add an event listener?",
+          "answer": "element.addEventListener('event', function) or element.onclick = function",
+          "favorite": false,
+          "created_at": "2024-01-15T13:00:00"
+        },
+        {
+          "id": 8,
+          "question": "What is hoisting?",
+          "answer": "JavaScript's behavior of moving declarations to the top of their scope",
+          "favorite": false,
+          "created_at": "2024-01-15T13:00:00"
+        },
+        {
+          "id": 9,
+          "question": "How do you create an object?",
+          "answer": "const obj = {key: 'value'} or const obj = new Object()",
+          "favorite": false,
+          "created_at": "2024-01-15T13:00:00"
+        },
+        {
+          "id": 10,
+          "question": "What is closure?",
+          "answer": "A function that has access to variables in its outer scope",
+          "favorite": true,
+          "created_at": "2024-01-15T13:00:00"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Movie Quotes",
+      "description": "Famous quotes from classic movies",
+      "created_at": "2024-01-15T13:30:00",
+      "cards": [
+        {
+          "id": 1,
+          "question": "\"May the Force be with you\"",
+          "answer": "Star Wars (1977)",
+          "favorite": true,
+          "created_at": "2024-01-15T13:30:00"
+        },
+        {
+          "id": 2,
+          "question": "\"Here's looking at you, kid\"",
+          "answer": "Casablanca (1942)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:30:00"
+        },
+        {
+          "id": 3,
+          "question": "\"I'll be back\"",
+          "answer": "The Terminator (1984)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:30:00"
+        },
+        {
+          "id": 4,
+          "question": "\"Life is like a box of chocolates\"",
+          "answer": "Forrest Gump (1994)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:30:00"
+        },
+        {
+          "id": 5,
+          "question": "\"You had me at hello\"",
+          "answer": "Jerry Maguire (1996)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:30:00"
+        },
+        {
+          "id": 6,
+          "question": "\"I see dead people\"",
+          "answer": "The Sixth Sense (1999)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:30:00"
+        },
+        {
+          "id": 7,
+          "question": "\"Houston, we have a problem\"",
+          "answer": "Apollo 13 (1995)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:30:00"
+        },
+        {
+          "id": 8,
+          "question": "\"There's no place like home\"",
+          "answer": "The Wizard of Oz (1939)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:30:00"
+        },
+        {
+          "id": 9,
+          "question": "\"I'm the king of the world!\"",
+          "answer": "Titanic (1997)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:30:00"
+        },
+        {
+          "id": 10,
+          "question": "\"You can't handle the truth!\"",
+          "answer": "A Few Good Men (1992)",
+          "favorite": false,
+          "created_at": "2024-01-15T13:30:00"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Cooking Measurements",
+      "description": "Common cooking conversions and measurements",
+      "created_at": "2024-01-15T14:00:00",
+      "cards": [
+        {
+          "id": 1,
+          "question": "How many cups in a gallon?",
+          "answer": "16 cups",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        },
+        {
+          "id": 2,
+          "question": "How many tablespoons in a cup?",
+          "answer": "16 tablespoons",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        },
+        {
+          "id": 3,
+          "question": "How many teaspoons in a tablespoon?",
+          "answer": "3 teaspoons",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        },
+        {
+          "id": 4,
+          "question": "How many ounces in a pound?",
+          "answer": "16 ounces",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        },
+        {
+          "id": 5,
+          "question": "How many grams in an ounce?",
+          "answer": "28.35 grams",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        },
+        {
+          "id": 6,
+          "question": "How many milliliters in a cup?",
+          "answer": "236.59 milliliters",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        },
+        {
+          "id": 7,
+          "question": "How many pints in a quart?",
+          "answer": "2 pints",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        },
+        {
+          "id": 8,
+          "question": "How many quarts in a gallon?",
+          "answer": "4 quarts",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        },
+        {
+          "id": 9,
+          "question": "How many grams in a kilogram?",
+          "answer": "1000 grams",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        },
+        {
+          "id": 10,
+          "question": "How many milliliters in a liter?",
+          "answer": "1000 milliliters",
+          "favorite": false,
+          "created_at": "2024-01-15T14:00:00"
+        }
+      ]
+    }
+  ]
+} 
