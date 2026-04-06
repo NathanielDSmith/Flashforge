@@ -407,6 +407,10 @@ a.btn, button.btn, .btn {
         padding: 0.5rem 1rem !important;
         font-size: 0.85rem !important;
     }
+
+    .keyboard-hints {
+        display: none;
+    }
     
     .study-mode-header h1 {
         font-size: 2rem;
