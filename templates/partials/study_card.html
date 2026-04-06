@@ -15,10 +15,18 @@
                 <div class="text-center w-full">
                     <div class="text-lg font-medium mb-4 opacity-80">Answer</div>
                     <div id="studyAnswer" class="text-2xl font-semibold mb-6"></div>
-                    <div class="flex justify-center space-x-4">
-                        <button onclick="flipStudyCardBack()" 
-                                class="btn btn-secondary">
-                            Flip Back
+                    <div class="score-btns">
+                        <button onclick="window.flashcardStudy.scoreCard('still-learning')" class="score-btn score-btn--learning">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Still learning
+                        </button>
+                        <button onclick="window.flashcardStudy.scoreCard('got-it')" class="score-btn score-btn--got-it">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Got it!
                         </button>
                     </div>
                 </div>
