@@ -285,6 +285,73 @@ a.btn, button.btn, .btn {
     margin-bottom: 6rem !important;
 }
 
+/* Search Bar */
+.search-wrap {
+    max-width: 480px;
+    margin: 0 auto 2rem;
+}
+
+.search-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 2.75rem 0.75rem 2.75rem;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    color: #111827;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.search-input::placeholder {
+    color: #9ca3af;
+}
+
+.search-clear {
+    position: absolute;
+    right: 0.85rem;
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.search-clear:hover {
+    color: #6b7280;
+}
+
+.search-meta {
+    text-align: center;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin-top: 0.5rem;
+}
+
 /* Enhanced Form Styles */
 .form-group {
     margin-bottom: 1.5rem;
@@ -418,6 +485,10 @@ a.btn, button.btn, .btn {
     .study-controls .btn {
         padding: 0.5rem 1rem !important;
         font-size: 0.85rem !important;
+    }
+
+    .keyboard-hints {
+        display: none;
     }
     
     .study-mode-header h1 {
