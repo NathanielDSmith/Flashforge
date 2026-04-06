@@ -240,6 +240,34 @@ a.btn, button.btn, .btn {
     white-space: nowrap;
 }
 
+/* Study Progress Bar */
+.study-progress-wrap {
+    margin-bottom: 1.5rem;
+}
+
+.study-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+}
+
+.study-progress-track {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.study-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #a5f3fc, #818cf8);
+    border-radius: 999px;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Study mode button spacing */
 .mb-24 {
     margin-bottom: 6rem !important;

@@ -63,9 +63,25 @@ class FlashcardStudyMode {
         const card = this.cardData[this.currentCardIndex];
         document.getElementById('studyQuestion').textContent = card.question;
         document.getElementById('studyAnswer').textContent = card.answer;
-        
+
         const studyCard = document.getElementById('studyCard');
         studyCard.classList.remove('flipped');
+
+        this.updateProgressBar();
+    }
+
+    updateProgressBar() {
+        const total = this.cardData.length;
+        const current = this.currentCardIndex + 1;
+        const pct = Math.round((current / total) * 100);
+
+        const bar = document.getElementById('studyProgressBar');
+        const label = document.getElementById('progressLabel');
+        const percent = document.getElementById('progressPercent');
+
+        if (bar) bar.style.width = pct + '%';
+        if (label) label.textContent = `Card ${current} of ${total}`;
+        if (percent) percent.textContent = pct + '%';
     }
 
     showStudyControls() {
