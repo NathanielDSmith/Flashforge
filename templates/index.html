@@ -26,9 +26,25 @@
     </div>
 
     {% if sets %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Search Bar -->
+        <div class="search-wrap">
+            <div class="search-inner">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z"/>
+                </svg>
+                <input id="setSearch" type="text" placeholder="Search sets…" class="search-input" autocomplete="off">
+                <button id="searchClear" class="search-clear hidden" aria-label="Clear search">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <p id="searchMeta" class="search-meta hidden"></p>
+        </div>
+
+        <div id="setsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for set in sets %}
-            <div class="card">
+            <div class="card" data-title="{{ set.title|lower }}" data-description="{{ set.description|lower if set.description else '' }}">
                 <div class="p-6">
                     <div class="flex justify-between items-start mb-4">
                         <h3 class="text-xl font-semibold text-gray-900">{{ set.title }}</h3>
@@ -67,6 +83,17 @@
             </div>
             {% endfor %}
         </div>
+
+        <!-- No results state -->
+        <div id="noSearchResults" class="hidden text-center py-12">
+            <div class="mx-auto w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-4 backdrop-filter backdrop-blur-sm">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z"/>
+                </svg>
+            </div>
+            <p class="text-white text-lg font-medium">No sets match "<span id="noResultsTerm"></span>"</p>
+            <p class="text-white opacity-70 mt-1">Try a different search term.</p>
+        </div>
     {% else %}
         <div class="text-center py-12">
             <div class="mx-auto w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6 backdrop-filter backdrop-blur-sm">
@@ -79,4 +106,52 @@
         </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const input = document.getElementById('setSearch');
+    const clearBtn = document.getElementById('searchClear');
+    const grid = document.getElementById('setsGrid');
+    const noResults = document.getElementById('noSearchResults');
+    const meta = document.getElementById('searchMeta');
+    const noResultsTerm = document.getElementById('noResultsTerm');
+
+    if (!input) return;
+
+    const cards = Array.from(grid.querySelectorAll('.card'));
+
+    function filter(query) {
+        const q = query.trim().toLowerCase();
+        clearBtn.classList.toggle('hidden', q === '');
+        let visible = 0;
+
+        cards.forEach(card => {
+            const matches = q === ''
+                || card.dataset.title.includes(q)
+                || card.dataset.description.includes(q);
+            card.style.display = matches ? '' : 'none';
+            if (matches) visible++;
+        });
+
+        const hasQuery = q !== '';
+        noResults.classList.toggle('hidden', !hasQuery || visible > 0);
+        meta.classList.toggle('hidden', !hasQuery || visible === 0);
+        if (hasQuery && visible > 0) {
+            meta.textContent = `${visible} set${visible !== 1 ? 's' : ''} found`;
+        }
+        if (hasQuery && visible === 0) {
+            noResultsTerm.textContent = query.trim();
+        }
+    }
+
+    input.addEventListener('input', () => filter(input.value));
+    clearBtn.addEventListener('click', () => {
+        input.value = '';
+        filter('');
+        input.focus();
+    });
+})();
+</script>
 {% endblock %} 
