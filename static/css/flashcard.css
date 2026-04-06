@@ -240,6 +240,30 @@ a.btn, button.btn, .btn {
     white-space: nowrap;
 }
 
+.keyboard-hints {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.78rem;
+    color: #9ca3af;
+    padding-left: 0.5rem;
+    border-left: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+.keyboard-hints kbd {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.72rem;
+    font-family: inherit;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    color: #4b5563;
+    box-shadow: 0 1px 0 #d1d5db;
+    margin-right: 2px;
+}
+
 /* Study mode button spacing */
 .mb-24 {
     margin-bottom: 6rem !important;
@@ -378,6 +402,10 @@ a.btn, button.btn, .btn {
     .study-controls .btn {
         padding: 0.5rem 1rem !important;
         font-size: 0.85rem !important;
+    }
+
+    .keyboard-hints {
+        display: none;
     }
     
     .study-mode-header h1 {
