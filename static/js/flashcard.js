@@ -10,6 +10,25 @@ class FlashcardStudyMode {
         if (typeof window.cardData !== 'undefined') {
             this.cardData = window.cardData;
         }
+        this.shuffleEnabled = false;
+    }
+
+    toggleShuffle() {
+        this.shuffleEnabled = !this.shuffleEnabled;
+        const btn = document.getElementById('shuffleBtn');
+        if (btn) {
+            btn.classList.toggle('shuffle-toggle--on', this.shuffleEnabled);
+            btn.setAttribute('aria-pressed', this.shuffleEnabled);
+        }
+    }
+
+    _shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
     }
 
     flipCardBack(button) {
@@ -37,9 +56,10 @@ class FlashcardStudyMode {
 
     enterStudyMode() {
         if (this.cardData.length === 0) return;
-        
+
         this.studyMode = true;
         this.currentCardIndex = 0;
+        this.activeDeck = this.shuffleEnabled ? this._shuffle(this.cardData) : this.cardData.slice();
         
         document.getElementById('normalMode').classList.add('hidden');
         document.getElementById('studyMode').classList.remove('hidden');
@@ -60,10 +80,11 @@ class FlashcardStudyMode {
     }
 
     loadStudyCard() {
-        const card = this.cardData[this.currentCardIndex];
+        const deck = this.activeDeck || this.cardData;
+        const card = deck[this.currentCardIndex];
         document.getElementById('studyQuestion').textContent = card.question;
         document.getElementById('studyAnswer').textContent = card.answer;
-        
+
         const studyCard = document.getElementById('studyCard');
         studyCard.classList.remove('flipped');
     }
@@ -95,7 +116,8 @@ class FlashcardStudyMode {
     }
 
     nextCard() {
-        if (this.currentCardIndex < this.cardData.length - 1) {
+        const deck = this.activeDeck || this.cardData;
+        if (this.currentCardIndex < deck.length - 1) {
             this.currentCardIndex++;
             this.loadStudyCard();
             this.updateStudyButton();
@@ -115,11 +137,12 @@ class FlashcardStudyMode {
         if (!button) return;
 
         if (this.studyMode) {
+            const deck = this.activeDeck || this.cardData;
             button.innerHTML = `
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
-                Exit Study Mode (${this.currentCardIndex + 1}/${this.cardData.length})
+                Exit Study Mode (${this.currentCardIndex + 1}/${deck.length})
             `;
         } else {
             button.innerHTML = `
