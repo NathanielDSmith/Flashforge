@@ -67,6 +67,30 @@
 
                 <!-- Current Card Display -->
                 {% include 'partials/study_card.html' %}
+
+                <!-- Results Screen (shown when all cards scored) -->
+                <div id="studyResults" class="hidden study-results">
+                    <div class="study-results-icon">🎉</div>
+                    <h3 class="study-results-title">Round complete!</h3>
+                    <div class="study-results-stats">
+                        <div class="study-results-stat study-results-stat--got-it">
+                            <span id="gotItCount" class="study-results-num">0</span>
+                            <span class="study-results-label">Got it</span>
+                        </div>
+                        <div class="study-results-stat study-results-stat--learning">
+                            <span id="learningCount" class="study-results-num">0</span>
+                            <span class="study-results-label">Still learning</span>
+                        </div>
+                    </div>
+                    <div class="study-results-actions">
+                        <button onclick="window.flashcardStudy.restartWithMissed()" id="retryMissedBtn" class="btn btn-secondary">
+                            Retry missed cards
+                        </button>
+                        <button onclick="window.flashcardStudy.restartAll()" class="btn">
+                            Restart all
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 

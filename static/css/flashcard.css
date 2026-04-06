@@ -240,32 +240,116 @@ a.btn, button.btn, .btn {
     white-space: nowrap;
 }
 
-/* Study Progress Bar */
-.study-progress-wrap {
-    margin-bottom: 1.5rem;
-}
-
-.study-progress-meta {
+/* Self-scoring buttons on card back */
+.score-btns {
     display: flex;
-    justify-content: space-between;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.score-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.25rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    color: white;
+}
+
+.score-btn:hover {
+    transform: translateY(-2px);
+}
+
+.score-btn--got-it {
+    background: linear-gradient(135deg, #34d399, #059669);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+}
+
+.score-btn--got-it:hover {
+    box-shadow: 0 6px 18px rgba(5, 150, 105, 0.55);
+}
+
+.score-btn--learning {
+    background: linear-gradient(135deg, #fb923c, #ea580c);
+    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.4);
+}
+
+.score-btn--learning:hover {
+    box-shadow: 0 6px 18px rgba(234, 88, 12, 0.55);
+}
+
+/* Results screen */
+.study-results {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    box-shadow: var(--shadow-heavy);
+}
+
+.study-results-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.study-results-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 2rem;
+}
+
+.study-results-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.study-results-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-radius: 16px;
+    min-width: 110px;
+}
+
+.study-results-stat--got-it {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+}
+
+.study-results-stat--learning {
+    background: linear-gradient(135deg, #ffedd5, #fed7aa);
+}
+
+.study-results-num {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.study-results-stat--got-it .study-results-num { color: #065f46; }
+.study-results-stat--learning .study-results-num { color: #9a3412; }
+
+.study-results-label {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 0.4rem;
-    font-weight: 500;
+    font-weight: 600;
+    color: #6b7280;
 }
 
-.study-progress-track {
-    height: 6px;
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 999px;
-    overflow: hidden;
-}
-
-.study-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #a5f3fc, #818cf8);
-    border-radius: 999px;
-    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+.study-results-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
 /* Study mode button spacing */

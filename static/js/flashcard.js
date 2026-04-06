@@ -10,35 +10,7 @@ class FlashcardStudyMode {
         if (typeof window.cardData !== 'undefined') {
             this.cardData = window.cardData;
         }
-        this._keyHandler = this._handleKeydown.bind(this);
-    }
-
-    _handleKeydown(e) {
-        if (!this.studyMode) return;
-        // Don't intercept if user is typing in an input
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-
-        switch (e.key) {
-            case ' ':
-            case 'Enter':
-                e.preventDefault();
-                const studyCard = document.getElementById('studyCard');
-                studyCard.classList.toggle('flipped');
-                break;
-            case 'ArrowRight':
-            case 'ArrowDown':
-                e.preventDefault();
-                this.nextCard();
-                break;
-            case 'ArrowLeft':
-            case 'ArrowUp':
-                e.preventDefault();
-                this.previousCard();
-                break;
-            case 'Escape':
-                this.exitStudyMode();
-                break;
-        }
+        this.scores = {}; // cardId -> 'got-it' | 'still-learning'
     }
 
     flipCardBack(button) {
@@ -64,15 +36,19 @@ class FlashcardStudyMode {
         }
     }
 
-    enterStudyMode() {
+    enterStudyMode(deck) {
         if (this.cardData.length === 0) return;
-        
+
         this.studyMode = true;
         this.currentCardIndex = 0;
+        this.activeDeck = deck || this.cardData.slice();
+        this.scores = {};
         
         document.getElementById('normalMode').classList.add('hidden');
         document.getElementById('studyMode').classList.remove('hidden');
-        
+        document.getElementById('studyResults').classList.add('hidden');
+        document.getElementById('studyCardContainer').classList.remove('hidden');
+
         this.loadStudyCard();
         this.updateStudyButton();
         this.showStudyControls();
@@ -91,7 +67,8 @@ class FlashcardStudyMode {
     }
 
     loadStudyCard() {
-        const card = this.cardData[this.currentCardIndex];
+        const deck = this.activeDeck || this.cardData;
+        const card = deck[this.currentCardIndex];
         document.getElementById('studyQuestion').textContent = card.question;
         document.getElementById('studyAnswer').textContent = card.answer;
 
@@ -113,6 +90,60 @@ class FlashcardStudyMode {
         if (bar) bar.style.width = pct + '%';
         if (label) label.textContent = `Card ${current} of ${total}`;
         if (percent) percent.textContent = pct + '%';
+    }
+
+    scoreCard(result) {
+        const deck = this.activeDeck || this.cardData;
+        const card = deck[this.currentCardIndex];
+        this.scores[card.id] = result;
+
+        if (this.currentCardIndex < deck.length - 1) {
+            this.currentCardIndex++;
+            this.loadStudyCard();
+            this.updateStudyButton();
+        } else {
+            this.showResults();
+        }
+    }
+
+    showResults() {
+        const deck = this.activeDeck || this.cardData;
+        const gotIt = Object.values(this.scores).filter(s => s === 'got-it').length;
+        const learning = deck.length - gotIt;
+
+        document.getElementById('studyCardContainer').classList.add('hidden');
+        document.getElementById('studyResults').classList.remove('hidden');
+        document.getElementById('gotItCount').textContent = gotIt;
+        document.getElementById('learningCount').textContent = learning;
+
+        const retryBtn = document.getElementById('retryMissedBtn');
+        retryBtn.style.display = learning > 0 ? '' : 'none';
+
+        this.hideStudyControls();
+    }
+
+    restartAll() {
+        this.activeDeck = this.cardData.slice();
+        this.scores = {};
+        this.currentCardIndex = 0;
+        document.getElementById('studyResults').classList.add('hidden');
+        document.getElementById('studyCardContainer').classList.remove('hidden');
+        this.loadStudyCard();
+        this.updateStudyButton();
+        this.showStudyControls();
+    }
+
+    restartWithMissed() {
+        const missed = (this.activeDeck || this.cardData).filter(c => this.scores[c.id] !== 'got-it');
+        if (missed.length === 0) return;
+        this.activeDeck = missed;
+        this.scores = {};
+        this.currentCardIndex = 0;
+        document.getElementById('studyResults').classList.add('hidden');
+        document.getElementById('studyCardContainer').classList.remove('hidden');
+        this.loadStudyCard();
+        this.updateStudyButton();
+        this.showStudyControls();
     }
 
     showStudyControls() {
@@ -173,11 +204,12 @@ class FlashcardStudyMode {
         if (!button) return;
 
         if (this.studyMode) {
+            const deck = this.activeDeck || this.cardData;
             button.innerHTML = `
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
-                Exit Study Mode (${this.currentCardIndex + 1}/${this.cardData.length})
+                Exit Study Mode (${this.currentCardIndex + 1}/${deck.length})
             `;
         } else {
             button.innerHTML = `
