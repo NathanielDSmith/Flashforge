@@ -10,7 +10,25 @@ class FlashcardStudyMode {
         if (typeof window.cardData !== 'undefined') {
             this.cardData = window.cardData;
         }
-        this.scores = {}; // cardId -> 'got-it' | 'still-learning'
+        this.shuffleEnabled = false;
+    }
+
+    toggleShuffle() {
+        this.shuffleEnabled = !this.shuffleEnabled;
+        const btn = document.getElementById('shuffleBtn');
+        if (btn) {
+            btn.classList.toggle('shuffle-toggle--on', this.shuffleEnabled);
+            btn.setAttribute('aria-pressed', this.shuffleEnabled);
+        }
+    }
+
+    _shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
     }
 
     flipCardBack(button) {
@@ -41,8 +59,7 @@ class FlashcardStudyMode {
 
         this.studyMode = true;
         this.currentCardIndex = 0;
-        this.activeDeck = deck || this.cardData.slice();
-        this.scores = {};
+        this.activeDeck = this.shuffleEnabled ? this._shuffle(this.cardData) : this.cardData.slice();
         
         document.getElementById('normalMode').classList.add('hidden');
         document.getElementById('studyMode').classList.remove('hidden');
@@ -184,7 +201,8 @@ class FlashcardStudyMode {
     }
 
     nextCard() {
-        if (this.currentCardIndex < this.cardData.length - 1) {
+        const deck = this.activeDeck || this.cardData;
+        if (this.currentCardIndex < deck.length - 1) {
             this.currentCardIndex++;
             this.loadStudyCard();
             this.updateStudyButton();
