@@ -52,16 +52,18 @@ class FlashcardStudyMode {
         this.loadStudyCard();
         this.updateStudyButton();
         this.showStudyControls();
+        document.addEventListener('keydown', this._keyHandler);
     }
 
     exitStudyMode() {
         this.studyMode = false;
-        
+
         document.getElementById('normalMode').classList.remove('hidden');
         document.getElementById('studyMode').classList.add('hidden');
-        
+
         this.updateStudyButton();
         this.hideStudyControls();
+        document.removeEventListener('keydown', this._keyHandler);
     }
 
     loadStudyCard() {
@@ -72,6 +74,22 @@ class FlashcardStudyMode {
 
         const studyCard = document.getElementById('studyCard');
         studyCard.classList.remove('flipped');
+
+        this.updateProgressBar();
+    }
+
+    updateProgressBar() {
+        const total = this.cardData.length;
+        const current = this.currentCardIndex + 1;
+        const pct = Math.round((current / total) * 100);
+
+        const bar = document.getElementById('studyProgressBar');
+        const label = document.getElementById('progressLabel');
+        const percent = document.getElementById('progressPercent');
+
+        if (bar) bar.style.width = pct + '%';
+        if (label) label.textContent = `Card ${current} of ${total}`;
+        if (percent) percent.textContent = pct + '%';
     }
 
     scoreCard(result) {
@@ -133,14 +151,25 @@ class FlashcardStudyMode {
         if (!controls) {
             controls = document.createElement('div');
             controls.id = 'studyControls';
-            controls.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-4 flex space-x-4 z-50';
+            controls.className = 'study-controls';
             controls.innerHTML = `
-                <button onclick="flashcardStudy.previousCard()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
-                    Previous
+                <button onclick="window.flashcardStudy.previousCard()" class="btn btn-secondary">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Prev
                 </button>
-                <button onclick="flashcardStudy.nextCard()" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                <button onclick="window.flashcardStudy.nextCard()" class="btn">
                     Next
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
                 </button>
+                <div class="keyboard-hints">
+                    <span><kbd>Space</kbd> flip</span>
+                    <span><kbd>←</kbd><kbd>→</kbd> navigate</span>
+                    <span><kbd>Esc</kbd> exit</span>
+                </div>
             `;
             document.body.appendChild(controls);
         }
