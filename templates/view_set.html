@@ -53,7 +53,18 @@
                     <h2 class="text-2xl font-bold mb-2">Study Mode</h2>
                     <p>Focus on one card at a time</p>
                 </div>
-                
+
+                <!-- Progress Bar -->
+                <div class="study-progress-wrap">
+                    <div class="study-progress-meta">
+                        <span id="progressLabel">Card 1 of {{ flashcard_set.cards|length }}</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="study-progress-track">
+                        <div id="studyProgressBar" class="study-progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
                 <!-- Current Card Display -->
                 {% include 'partials/study_card.html' %}
             </div>
