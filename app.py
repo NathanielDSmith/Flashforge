@@ -122,6 +122,39 @@ def favorites():
         flash(f'Error loading favorites: {str(e)}', 'error')
         return render_template('favorites.html', favorite_cards=[])
 
+@app.route('/set/<int:set_id>/edit', methods=['GET', 'POST'])
+def edit_set(set_id):
+    try:
+        flashcard_set = flashcard_manager.find_set_by_id(set_id)
+        if not flashcard_set:
+            flash('Flashcard set not found.', 'error')
+            return redirect(url_for('index'))
+
+        if request.method == 'POST':
+            title = request.form.get('title', '').strip()
+            description = request.form.get('description', '').strip()
+
+            is_valid, error_message = validate_set_data(
+                title, description,
+                app.config['MAX_TITLE_LENGTH'],
+                app.config['MAX_DESCRIPTION_LENGTH']
+            )
+            if not is_valid:
+                flash(error_message, 'error')
+                return render_template('edit_set.html', flashcard_set=flashcard_set,
+                                       title=title, description=description)
+
+            if flashcard_manager.update_set(set_id, title, description):
+                flash('Set updated successfully!', 'success')
+                return redirect(url_for('view_set', set_id=set_id))
+            else:
+                flash('Error updating set. Please try again.', 'error')
+
+        return render_template('edit_set.html', flashcard_set=flashcard_set)
+    except Exception as e:
+        flash(f'Error editing set: {str(e)}', 'error')
+        return redirect(url_for('view_set', set_id=set_id))
+
 @app.route('/set/<int:set_id>/delete', methods=['POST'])
 def delete_set(set_id):
     try:
