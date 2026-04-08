@@ -186,6 +186,17 @@ class FlashcardStudyMode {
         retryBtn.style.display = learning > 0 ? '' : 'none';
 
         this.hideStudyControls();
+
+        // Persist score so home page can show last-session badge
+        if (typeof window.currentSetId !== 'undefined') {
+            try {
+                localStorage.setItem('ff-score-' + window.currentSetId, JSON.stringify({
+                    got: gotIt,
+                    total: this.cardData.length,
+                    date: new Date().toISOString()
+                }));
+            } catch (_) {}
+        }
     }
 
     restartAll() {

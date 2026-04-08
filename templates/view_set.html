@@ -135,6 +135,7 @@
 
 {% block scripts %}
 <script>
+window.currentSetId = {{ flashcard_set.id }};
 // Initialize card data for study mode
 window.cardData = [
     {% for card in flashcard_set.cards %}

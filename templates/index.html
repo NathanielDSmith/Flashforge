@@ -44,7 +44,7 @@
 
         <div id="setsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for set in sets %}
-            <div class="card" data-title="{{ set.title|lower }}" data-description="{{ set.description|lower if set.description else '' }}">
+            <div class="card" data-title="{{ set.title|lower }}" data-description="{{ set.description|lower if set.description else '' }}" data-set-id="{{ set.id }}">
                 <div class="p-6">
                     <div class="flex justify-between items-start mb-4">
                         <h3 class="text-xl font-semibold text-gray-900">{{ set.title }}</h3>
@@ -74,6 +74,7 @@
                         <span>{{ set.created_at.split('T')[0] }}</span>
                     </div>
                     
+                    <div class="last-score-badge" id="score-{{ set.id }}" style="display:none"></div>
                     <div class="mt-4">
                         <a href="{{ url_for('view_set', set_id=set.id) }}" class="btn w-full text-center">
                             Study Set
@@ -151,6 +152,29 @@
         input.value = '';
         filter('');
         input.focus();
+    });
+})();
+</script>
+
+<script>
+// Inject last-score badges from localStorage
+(function () {
+    document.querySelectorAll('.card[data-set-id]').forEach(function (card) {
+        var id = card.dataset.setId;
+        try {
+            var raw = localStorage.getItem('ff-score-' + id);
+            if (!raw) return;
+            var s = JSON.parse(raw);
+            var pct = Math.round((s.got / s.total) * 100);
+            var cls = pct === 100 ? 'score-badge--perfect' : pct >= 70 ? 'score-badge--good' : 'score-badge--low';
+            var badge = document.getElementById('score-' + id);
+            if (badge) {
+                badge.innerHTML = '<span class="score-badge ' + cls + '">'
+                    + s.got + '/' + s.total + ' last session'
+                    + '</span>';
+                badge.style.display = '';
+            }
+        } catch (_) {}
     });
 })();
 </script>
