@@ -97,6 +97,44 @@ def new_card(set_id):
         flash(f'Error loading flashcard set: {str(e)}', 'error')
         return redirect(url_for('index'))
 
+@app.route('/set/<int:set_id>/card/<int:card_id>/edit', methods=['GET', 'POST'])
+def edit_card(set_id, card_id):
+    try:
+        flashcard_set = flashcard_manager.find_set_by_id(set_id)
+        if not flashcard_set:
+            flash('Flashcard set not found.', 'error')
+            return redirect(url_for('index'))
+
+        card = flashcard_manager.find_card_by_id(flashcard_set, card_id)
+        if not card:
+            flash('Card not found.', 'error')
+            return redirect(url_for('view_set', set_id=set_id))
+
+        if request.method == 'POST':
+            question = request.form.get('question', '').strip()
+            answer = request.form.get('answer', '').strip()
+
+            is_valid, error_message = validate_card_data(
+                question, answer,
+                app.config['MAX_QUESTION_LENGTH'],
+                app.config['MAX_ANSWER_LENGTH']
+            )
+            if not is_valid:
+                flash(error_message, 'error')
+                return render_template('edit_card.html', flashcard_set=flashcard_set, card=card,
+                                       question=question, answer=answer)
+
+            if flashcard_manager.update_card(set_id, card_id, question, answer):
+                flash('Card updated successfully!', 'success')
+                return redirect(url_for('view_set', set_id=set_id))
+            else:
+                flash('Error updating card. Please try again.', 'error')
+
+        return render_template('edit_card.html', flashcard_set=flashcard_set, card=card)
+    except Exception as e:
+        flash(f'Error editing card: {str(e)}', 'error')
+        return redirect(url_for('view_set', set_id=set_id))
+
 @app.route('/card/<int:set_id>/<int:card_id>/toggle-favorite', methods=['POST'])
 def toggle_favorite(set_id, card_id):
     try:
