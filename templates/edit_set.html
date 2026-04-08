@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Set - {{ flashcard_set.title }} - FlashForge{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="card p-6">
+        <div class="mb-6">
+            <div class="flex items-center mb-4">
+                <a href="{{ url_for('view_set', set_id=flashcard_set.id) }}" class="text-indigo-600 hover:text-indigo-800 mr-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </a>
+                <h1 class="text-3xl font-bold text-gray-900">Edit Set</h1>
+            </div>
+            <p class="text-gray-600">Update the title or description for this flashcard set.</p>
+        </div>
+
+        <form method="POST" class="space-y-6">
+            <div class="form-group">
+                <label for="title" class="form-label">Set Title *</label>
+                <input type="text"
+                       id="title"
+                       name="title"
+                       required
+                       class="form-input"
+                       placeholder="e.g., Spanish Vocabulary, Math Formulas, etc."
+                       value="{{ request.form.get('title', flashcard_set.title) }}">
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Description (Optional)</label>
+                <textarea id="description"
+                          name="description"
+                          rows="3"
+                          class="form-input form-textarea"
+                          placeholder="Describe what this set contains...">{{ request.form.get('description', flashcard_set.description) }}</textarea>
+            </div>
+
+            <div class="flex items-center justify-between pt-4">
+                <a href="{{ url_for('view_set', set_id=flashcard_set.id) }}"
+                   class="btn btn-secondary">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Cancel
+                </a>
+                <button type="submit" class="btn">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
