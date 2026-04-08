@@ -74,6 +74,17 @@
                 <!-- Current Card Display -->
                 {% include 'partials/study_card.html' %}
 
+                <!-- Swipe hint (mobile only) -->
+                <p class="swipe-hint">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
+                    </svg>
+                    Swipe to navigate &nbsp;·&nbsp; Tap to flip
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </p>
+
                 <!-- Results Screen (shown when all cards scored) -->
                 <div id="studyResults" class="hidden study-results">
                     <div class="study-results-icon">🎉</div>

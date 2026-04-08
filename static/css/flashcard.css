@@ -579,21 +579,19 @@ a.btn, button.btn, .btn {
     }
 }
 
-/* Dark mode: card text overrides for Tailwind colour utilities */
-[data-theme="dark"] .text-gray-900 { color: var(--text-primary) !important; }
-[data-theme="dark"] .text-gray-700 { color: var(--text-secondary) !important; }
-[data-theme="dark"] .text-gray-600 { color: var(--text-muted) !important; }
-[data-theme="dark"] .text-gray-500 { color: var(--text-muted) !important; }
-[data-theme="dark"] .bg-blue-50    { background: rgba(30, 58, 138, 0.25) !important; }
-[data-theme="dark"] .text-blue-900 { color: #93c5fd !important; }
-[data-theme="dark"] .text-blue-800 { color: #bfdbfe !important; }
-[data-theme="dark"] .border { border-color: #334155 !important; }
-[data-theme="dark"] .keyboard-hints { color: #64748b; }
-[data-theme="dark"] .keyboard-hints kbd {
-    background: #1e293b;
-    border-color: #475569;
-    color: #94a3b8;
-    box-shadow: 0 1px 0 #475569;
+/* Swipe hint — mobile only */
+.swipe-hint {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin-top: 1rem;
+}
+
+@media (pointer: coarse) {
+    .swipe-hint { display: flex; }
 }
 
 /* Smooth Scrolling */
