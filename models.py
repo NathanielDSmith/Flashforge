@@ -76,6 +76,15 @@ class FlashcardManager:
             return new_card
         return None
     
+    def update_set(self, set_id: int, title: str, description: str = '') -> bool:
+        data = self.load_data()
+        for set_item in data['sets']:
+            if set_item['id'] == set_id:
+                set_item['title'] = title
+                set_item['description'] = description
+                return self.save_data(data)
+        return False
+
     def delete_set(self, set_id: int) -> bool:
         data = self.load_data()
         original_count = len(data['sets'])
