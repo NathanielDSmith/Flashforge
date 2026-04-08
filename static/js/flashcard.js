@@ -11,6 +11,53 @@ class FlashcardStudyMode {
             this.cardData = window.cardData;
         }
         this.shuffleEnabled = false;
+        this._touch = {};
+        this._boundTouchStart = this._onTouchStart.bind(this);
+        this._boundTouchEnd   = this._onTouchEnd.bind(this);
+    }
+
+    _onTouchStart(e) {
+        const t = e.changedTouches[0];
+        this._touch = { x: t.clientX, y: t.clientY, time: Date.now() };
+    }
+
+    _onTouchEnd(e) {
+        const t = e.changedTouches[0];
+        const dx = t.clientX - this._touch.x;
+        const dy = t.clientY - this._touch.y;
+        const dt = Date.now() - this._touch.time;
+        const absDx = Math.abs(dx);
+        const absDy = Math.abs(dy);
+
+        // Tap: small movement, fast → flip
+        if (absDx < 10 && absDy < 10 && dt < 300) {
+            const studyCard = document.getElementById('studyCard');
+            if (studyCard) studyCard.classList.toggle('flipped');
+            return;
+        }
+
+        // Horizontal swipe (more horizontal than vertical, > 50px)
+        if (absDx > 50 && absDx > absDy) {
+            if (dx < 0) {
+                this.nextCard();
+            } else {
+                this.previousCard();
+            }
+        }
+    }
+
+    _bindSwipe() {
+        const el = document.getElementById('studyCardContainer');
+        if (!el) return;
+        el.addEventListener('touchstart', this._boundTouchStart, { passive: true });
+        el.addEventListener('touchend',   this._boundTouchEnd,   { passive: true });
+    }
+
+    _unbindSwipe() {
+        const el = document.getElementById('studyCardContainer');
+        if (!el) return;
+        el.removeEventListener('touchstart', this._boundTouchStart);
+        el.removeEventListener('touchend',   this._boundTouchEnd);
     }
 
     toggleShuffle() {
@@ -70,6 +117,7 @@ class FlashcardStudyMode {
         this.updateStudyButton();
         this.showStudyControls();
         document.addEventListener('keydown', this._keyHandler);
+        this._bindSwipe();
     }
 
     exitStudyMode() {
@@ -81,6 +129,7 @@ class FlashcardStudyMode {
         this.updateStudyButton();
         this.hideStudyControls();
         document.removeEventListener('keydown', this._keyHandler);
+        this._unbindSwipe();
     }
 
     loadStudyCard() {

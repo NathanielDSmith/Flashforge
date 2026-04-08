@@ -511,6 +511,21 @@ a.btn, button.btn, .btn {
     }
 }
 
+/* Swipe hint — mobile only */
+.swipe-hint {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin-top: 1rem;
+}
+
+@media (pointer: coarse) {
+    .swipe-hint { display: flex; }
+}
+
 /* Smooth Scrolling */
 html {
     scroll-behavior: smooth;
