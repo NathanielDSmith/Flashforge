@@ -539,4 +539,37 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--secondary-gradient);
-} 
+}
+
+/* Last-score badge on home page cards */
+.last-score-badge {
+    margin-bottom: 0.5rem;
+}
+
+.score-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.score-badge--perfect {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.score-badge--good {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.score-badge--low {
+    background: #ffedd5;
+    color: #9a3412;
+}
+
+[data-theme="dark"] .score-badge--perfect { background: rgba(6,95,70,0.35);  color: #6ee7b7; }
+[data-theme="dark"] .score-badge--good    { background: rgba(30,64,175,0.35); color: #93c5fd; }
+[data-theme="dark"] .score-badge--low     { background: rgba(154,52,18,0.35); color: #fdba74; } 
