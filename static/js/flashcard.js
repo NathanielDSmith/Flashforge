@@ -11,9 +11,37 @@ class FlashcardStudyMode {
             this.cardData = window.cardData;
         }
         this.shuffleEnabled = false;
+        this.scores = {};
         this._touch = {};
+        this._keyHandler = this._handleKeydown.bind(this);
         this._boundTouchStart = this._onTouchStart.bind(this);
         this._boundTouchEnd   = this._onTouchEnd.bind(this);
+    }
+
+    _handleKeydown(e) {
+        if (!this.studyMode) return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        switch (e.key) {
+            case ' ':
+            case 'Enter':
+                e.preventDefault();
+                document.getElementById('studyCard').classList.toggle('flipped');
+                break;
+            case 'ArrowRight':
+            case 'ArrowDown':
+                e.preventDefault();
+                this.nextCard();
+                break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                e.preventDefault();
+                this.previousCard();
+                break;
+            case 'Escape':
+                this.exitStudyMode();
+                break;
+        }
     }
 
     _onTouchStart(e) {
@@ -107,6 +135,7 @@ class FlashcardStudyMode {
         this.studyMode = true;
         this.currentCardIndex = 0;
         this.activeDeck = this.shuffleEnabled ? this._shuffle(this.cardData) : this.cardData.slice();
+        this.scores = {};
         
         document.getElementById('normalMode').classList.add('hidden');
         document.getElementById('studyMode').classList.remove('hidden');
