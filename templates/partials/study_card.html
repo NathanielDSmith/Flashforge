@@ -1,19 +1,17 @@
 <div id="studyCardContainer" class="study-card-container" style="touch-action: pan-y;">
     <div id="studyCard" class="flip-card mx-auto" style="max-width: 600px;">
         <div class="flip-card-inner">
-            <!-- Front of study card -->
             <div id="studyCardFront" class="flip-card-front" onclick="flipStudyCard()">
                 <div class="text-center">
-                    <div class="text-lg font-medium mb-4 opacity-80">Question</div>
+                    <div class="text-sm font-semibold mb-4 opacity-70 uppercase tracking-wider">Question</div>
                     <div id="studyQuestion" class="text-2xl font-semibold mb-6"></div>
-                    <div class="text-sm opacity-70">Click to reveal answer</div>
+                    <div class="text-xs opacity-60">Click to reveal answer</div>
                 </div>
             </div>
-            
-            <!-- Back of study card -->
+
             <div id="studyCardBack" class="flip-card-back">
                 <div class="text-center w-full">
-                    <div class="text-lg font-medium mb-4 opacity-80">Answer</div>
+                    <div class="text-sm font-semibold mb-4 opacity-70 uppercase tracking-wider">Answer</div>
                     <div id="studyAnswer" class="text-2xl font-semibold mb-6"></div>
                     <div class="score-btns">
                         <button onclick="window.flashcardStudy.scoreCard('still-learning')" class="score-btn score-btn--learning">
@@ -26,11 +24,11 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
-                            Got it!
+                            Got it
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div> 
+</div>

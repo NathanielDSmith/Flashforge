@@ -57,14 +57,12 @@ class FlashcardStudyMode {
         const absDx = Math.abs(dx);
         const absDy = Math.abs(dy);
 
-        // Tap: small movement, fast → flip
         if (absDx < 10 && absDy < 10 && dt < 300) {
             const studyCard = document.getElementById('studyCard');
             if (studyCard) studyCard.classList.toggle('flipped');
             return;
         }
 
-        // Horizontal swipe (more horizontal than vertical, > 50px)
         if (absDx > 50 && absDx > absDy) {
             if (dx < 0) {
                 this.nextCard();
@@ -136,7 +134,7 @@ class FlashcardStudyMode {
         this.currentCardIndex = 0;
         this.activeDeck = this.shuffleEnabled ? this._shuffle(this.cardData) : this.cardData.slice();
         this.scores = {};
-        
+
         document.getElementById('normalMode').classList.add('hidden');
         document.getElementById('studyMode').classList.remove('hidden');
         document.getElementById('studyResults').classList.add('hidden');
@@ -178,12 +176,12 @@ class FlashcardStudyMode {
         const current = this.currentCardIndex + 1;
         const pct = Math.round((current / total) * 100);
 
-        const bar = document.getElementById('studyProgressBar');
-        const label = document.getElementById('progressLabel');
+        const bar     = document.getElementById('studyProgressBar');
+        const label   = document.getElementById('progressLabel');
         const percent = document.getElementById('progressPercent');
 
-        if (bar) bar.style.width = pct + '%';
-        if (label) label.textContent = `Card ${current} of ${total}`;
+        if (bar)     bar.style.width = pct + '%';
+        if (label)   label.textContent = `Card ${current} of ${total}`;
         if (percent) percent.textContent = pct + '%';
     }
 
@@ -216,7 +214,6 @@ class FlashcardStudyMode {
 
         this.hideStudyControls();
 
-        // Persist score so home page can show last-session badge
         if (typeof window.currentSetId !== 'undefined') {
             try {
                 localStorage.setItem('ff-score-' + window.currentSetId, JSON.stringify({
@@ -284,9 +281,7 @@ class FlashcardStudyMode {
 
     hideStudyControls() {
         const controls = document.getElementById('studyControls');
-        if (controls) {
-            controls.style.display = 'none';
-        }
+        if (controls) controls.style.display = 'none';
     }
 
     nextCard() {
@@ -334,48 +329,34 @@ function flipCard(cardElement) {
 }
 
 function flipCardBack(button) {
-    if (window.flashcardStudy) {
-        window.flashcardStudy.flipCardBack(button);
-    }
+    if (window.flashcardStudy) window.flashcardStudy.flipCardBack(button);
 }
 
 function flipStudyCard() {
-    if (window.flashcardStudy) {
-        window.flashcardStudy.flipStudyCard();
-    }
+    if (window.flashcardStudy) window.flashcardStudy.flipStudyCard();
 }
 
 function flipStudyCardBack() {
-    if (window.flashcardStudy) {
-        window.flashcardStudy.flipStudyCardBack();
-    }
+    if (window.flashcardStudy) window.flashcardStudy.flipStudyCardBack();
 }
 
 function toggleStudyMode() {
-    if (window.flashcardStudy) {
-        window.flashcardStudy.toggleStudyMode();
-    }
+    if (window.flashcardStudy) window.flashcardStudy.toggleStudyMode();
 }
 
 function nextCard() {
-    if (window.flashcardStudy) {
-        window.flashcardStudy.nextCard();
-    }
+    if (window.flashcardStudy) window.flashcardStudy.nextCard();
 }
 
 function previousCard() {
-    if (window.flashcardStudy) {
-        window.flashcardStudy.previousCard();
-    }
+    if (window.flashcardStudy) window.flashcardStudy.previousCard();
 }
 
 function deleteCard(setId, cardId, button) {
     event.stopPropagation();
-    
-    if (!confirm('Are you sure you want to delete this card?')) {
-        return;
-    }
-    
+
+    if (!confirm('Are you sure you want to delete this card?')) return;
+
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = `/set/${setId}/card/${cardId}/delete`;
@@ -385,16 +366,14 @@ function deleteCard(setId, cardId, button) {
 
 function toggleFavorite(setId, cardId, button) {
     event.stopPropagation();
-    
+
     const originalContent = button.innerHTML;
     button.innerHTML = '<svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
     button.disabled = true;
-    
+
     fetch(`/card/${setId}/${cardId}/toggle-favorite`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
+        headers: { 'Content-Type': 'application/json' }
     })
     .then(response => response.json())
     .then(data => {
@@ -404,15 +383,13 @@ function toggleFavorite(setId, cardId, button) {
             } else {
                 button.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>';
             }
-            
             showNotification(data.message, 'success');
         } else {
             button.innerHTML = originalContent;
             showNotification(data.message || 'Error updating favorite status', 'error');
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
+    .catch(() => {
         button.innerHTML = originalContent;
         showNotification('Error updating favorite status', 'error');
     })
@@ -423,12 +400,12 @@ function toggleFavorite(setId, cardId, button) {
 
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ${
-        type === 'success' ? 'bg-green-500 text-white' : 
-        type === 'error' ? 'bg-red-500 text-white' : 
+    notification.className = `toast fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ${
+        type === 'success' ? 'bg-green-500 text-white' :
+        type === 'error'   ? 'bg-red-500 text-white'   :
         'bg-blue-500 text-white'
     }`;
-    
+
     notification.innerHTML = `
         <div class="flex items-center">
             <span class="flex-1">${message}</span>
@@ -439,13 +416,13 @@ function showNotification(message, type = 'info') {
             </button>
         </div>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
-        if (notification.parentElement) {
-            notification.remove();
-        }
+        if (!notification.parentElement) return;
+        notification.classList.add('toast-out');
+        notification.addEventListener('animationend', () => notification.remove(), { once: true });
     }, 3000);
 }
 
@@ -453,4 +430,4 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('studyModeBtn')) {
         window.flashcardStudy = new FlashcardStudyMode();
     }
-}); 
+});
