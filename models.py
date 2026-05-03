@@ -36,17 +36,18 @@ class FlashcardManager:
     def find_card_by_id(self, flashcard_set: Dict, card_id: int) -> Optional[Dict]:
         return next((c for c in flashcard_set['cards'] if c['id'] == card_id), None)
     
-    def create_set(self, title: str, description: str = '') -> Optional[Dict]:
+    def create_set(self, title: str, description: str = '', category: str = 'general') -> Optional[Dict]:
         data = self.load_data()
         new_set = {
             'id': self.get_next_id(data['sets']),
             'title': title,
             'description': description,
+            'category': category,
             'created_at': datetime.now().isoformat(),
             'cards': []
         }
         data['sets'].append(new_set)
-        
+
         if self.save_data(data):
             return new_set
         return None
@@ -76,12 +77,13 @@ class FlashcardManager:
             return new_card
         return None
     
-    def update_set(self, set_id: int, title: str, description: str = '') -> bool:
+    def update_set(self, set_id: int, title: str, description: str = '', category: str = 'general') -> bool:
         data = self.load_data()
         for set_item in data['sets']:
             if set_item['id'] == set_id:
                 set_item['title'] = title
                 set_item['description'] = description
+                set_item['category'] = category
                 return self.save_data(data)
         return False
 

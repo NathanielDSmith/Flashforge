@@ -43,10 +43,19 @@
 
         <div id="setsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for set in sets %}
-            <div class="card" data-title="{{ set.title|lower }}" data-description="{{ set.description|lower if set.description else '' }}" data-set-id="{{ set.id }}">
+            {% set category = set.get('category', 'general') %}
+            <div class="card" data-title="{{ set.title|lower }}" data-description="{{ set.description|lower if set.description else '' }}" data-set-id="{{ set.id }}" data-category="{{ category }}">
                 <div class="p-6">
                     <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-semibold text-gray-900">{{ set.title }}</h3>
+                        <div>
+                            <span class="inline-block text-xs font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-2
+                                {% if category == 'japanese' %}bg-yellow-100 text-yellow-800
+                                {% elif category == 'programming' %}bg-green-100 text-green-800
+                                {% else %}bg-gray-100 text-gray-600{% endif %}">
+                                {{ category | capitalize }}
+                            </span>
+                            <h3 class="text-xl font-semibold text-gray-900">{{ set.title }}</h3>
+                        </div>
                         <div class="flex space-x-2">
                             <a href="{{ url_for('view_set', set_id=set.id) }}" class="text-indigo-600 hover:text-indigo-800">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

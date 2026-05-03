@@ -35,6 +35,7 @@ def new_set():
     if request.method == 'POST':
         title = request.form.get('title', '').strip()
         description = request.form.get('description', '').strip()
+        category = request.form.get('category', 'general').strip()
 
         is_valid, error_message = validate_set_data(
             title, description,
@@ -43,10 +44,10 @@ def new_set():
         )
         if not is_valid:
             flash(error_message, 'error')
-            return render_template('new_set.html', title=title, description=description)
+            return render_template('new_set.html', title=title, description=description, category=category)
 
         try:
-            new_set = flashcard_manager.create_set(title, description)
+            new_set = flashcard_manager.create_set(title, description, category)
             if new_set:
                 flash('Flashcard set created successfully!', 'success')
                 return redirect(url_for('view_set', set_id=new_set['id']))
@@ -185,6 +186,7 @@ def edit_set(set_id):
         if request.method == 'POST':
             title = request.form.get('title', '').strip()
             description = request.form.get('description', '').strip()
+            category = request.form.get('category', 'general').strip()
 
             is_valid, error_message = validate_set_data(
                 title, description,
@@ -194,9 +196,9 @@ def edit_set(set_id):
             if not is_valid:
                 flash(error_message, 'error')
                 return render_template('edit_set.html', flashcard_set=flashcard_set,
-                                       title=title, description=description)
+                                       title=title, description=description, category=category)
 
-            if flashcard_manager.update_set(set_id, title, description):
+            if flashcard_manager.update_set(set_id, title, description, category):
                 flash('Set updated successfully!', 'success')
                 return redirect(url_for('view_set', set_id=set_id))
             flash('Error updating set. Please try again.', 'error')
