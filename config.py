@@ -3,7 +3,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-only-secret-do-not-use-in-production'
-    DATA_FILE = os.environ.get('DATA_FILE') or 'flashcards.json'
+    DATA_FILE = os.environ.get('DATA_FILE') or 'flashcards.db'
     DEBUG = os.environ.get('FLASK_DEBUG', 'True').lower() == 'true'
 
     MAX_TITLE_LENGTH = 100
@@ -36,7 +36,7 @@ class ProductionConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    DATA_FILE = 'test_flashcards.json'
+    DATA_FILE = 'test_flashcards.db'
 
 
 config = {
