@@ -3,15 +3,18 @@
 {% block title %}FlashForge - Favorites{% endblock %}
 
 {% block content %}
-<div class="px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold page-heading mb-3">Your Favorites</h1>
-        <p class="text-lg page-subheading mb-6">All your starred cards in one place</p>
-        <a href="{{ url_for('index') }}" class="btn btn-secondary">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    <div class="page-header mb-6">
+        <div>
+            <h1 class="text-2xl font-bold page-heading">Favorites</h1>
+            <p class="page-subheading text-sm mt-0.5">
+                {% if favorite_cards %}{{ favorite_cards|length }} starred card{{ 's' if favorite_cards|length != 1 else '' }}{% else %}No starred cards yet{% endif %}
+            </p>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-ghost btn-sm">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
-            Back to Home
+            All Sets
         </a>
     </div>
 
@@ -69,5 +72,4 @@
             <p class="page-subheading text-sm">Star any card while studying to find it here.</p>
         </div>
     {% endif %}
-</div>
 {% endblock %}
