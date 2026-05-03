@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
     <div class="card p-6 mb-6">
         <div class="flex justify-between items-start">
             <div>
@@ -18,8 +17,7 @@
                 </div>
             </div>
             <div class="flex space-x-2">
-                <a href="{{ url_for('new_card', set_id=flashcard_set.id) }}"
-                   class="btn">
+                <a href="{{ url_for('new_card', set_id=flashcard_set.id) }}" class="btn">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
@@ -44,23 +42,19 @@
     </div>
 
     {% if flashcard_set.cards %}
-        <!-- Flashcards Grid (Normal Mode) -->
         <div id="normalMode" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for card in flashcard_set.cards %}
                 {% include 'partials/flashcard.html' %}
             {% endfor %}
         </div>
 
-        <!-- Study Mode Display (Hidden by default) -->
         <div id="studyMode" class="hidden">
             <div class="max-w-4xl mx-auto">
-                <!-- Study Mode Header -->
                 <div class="study-mode-header">
                     <h2 class="text-2xl font-bold mb-2">Study Mode</h2>
                     <p>Focus on one card at a time</p>
                 </div>
 
-                <!-- Progress Bar -->
                 <div class="study-progress-wrap">
                     <div class="study-progress-meta">
                         <span id="progressLabel">Card 1 of {{ flashcard_set.cards|length }}</span>
@@ -71,10 +65,8 @@
                     </div>
                 </div>
 
-                <!-- Current Card Display -->
                 {% include 'partials/study_card.html' %}
 
-                <!-- Swipe hint (mobile only) -->
                 <p class="swipe-hint">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
@@ -85,10 +77,11 @@
                     </svg>
                 </p>
 
-                <!-- Results Screen (shown when all cards scored) -->
                 <div id="studyResults" class="hidden study-results">
-                    <div class="study-results-icon">🎉</div>
-                    <h3 class="study-results-title">Round complete!</h3>
+                    <svg class="study-results-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h3 class="study-results-title">Round complete</h3>
                     <div class="study-results-stats">
                         <div class="study-results-stat study-results-stat--got-it">
                             <span id="gotItCount" class="study-results-num">0</span>
@@ -101,7 +94,7 @@
                     </div>
                     <div class="study-results-actions">
                         <button onclick="window.flashcardStudy.restartWithMissed()" id="retryMissedBtn" class="btn btn-secondary">
-                            Retry missed cards
+                            Retry missed
                         </button>
                         <button onclick="window.flashcardStudy.restartAll()" class="btn">
                             Restart all
@@ -111,7 +104,6 @@
             </div>
         </div>
 
-        <!-- Study Mode Button -->
         <div class="study-launch">
             <button onclick="toggleStudyMode()" id="studyModeBtn" class="btn">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,7 +119,6 @@
             </button>
         </div>
     {% else %}
-        <!-- Empty State -->
         {% include 'partials/empty_state.html' with context %}
     {% endif %}
 </div>
@@ -136,7 +127,6 @@
 {% block scripts %}
 <script>
 window.currentSetId = {{ flashcard_set.id }};
-// Initialize card data for study mode
 window.cardData = [
     {% for card in flashcard_set.cards %}
     {
@@ -147,4 +137,4 @@ window.cardData = [
     {% endfor %}
 ];
 </script>
-{% endblock %} 
+{% endblock %}
