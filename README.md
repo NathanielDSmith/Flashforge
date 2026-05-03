@@ -4,12 +4,12 @@ A flashcard web app built with Flask and TailwindCSS. Create sets, add cards, fl
 
 ## Features
 
-- Create and manage flashcard sets
+- Create and manage flashcard sets with categories
 - Add, edit, and delete cards
 - 3D flip animation to reveal answers
 - Study mode with single-card navigation
 - Favourite cards for focused review
-- JSON file storage, no database needed
+- SQLite storage via Python's stdlib `sqlite3`
 
 ## Project Structure
 
@@ -46,13 +46,19 @@ python app.py
 
 Visit `http://localhost:5000`
 
+If you have existing data in `flashcards.json`, run the migration first:
+
+```bash
+python migrate_json_to_sqlite.py
+```
+
 ## Configuration
 
 Set via environment variables:
 
 ```bash
 SECRET_KEY=your-secret-key
-DATA_FILE=flashcards.json
+DATA_FILE=flashcards.db
 FLASK_DEBUG=True
 ```
 
