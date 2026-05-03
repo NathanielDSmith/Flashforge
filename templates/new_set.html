@@ -28,11 +28,20 @@
                 <label for="description" class="form-label">
                     Description (Optional)
                 </label>
-                <textarea id="description" 
-                          name="description" 
+                <textarea id="description"
+                          name="description"
                           rows="3"
                           class="form-input form-textarea"
                           placeholder="Describe what this set contains...">{{ request.form.get('description', '') }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="category" class="form-label">Category</label>
+                <select id="category" name="category" class="form-input">
+                    <option value="general"     {% if (category or 'general') == 'general'     %}selected{% endif %}>General</option>
+                    <option value="japanese"    {% if (category or '') == 'japanese'    %}selected{% endif %}>Japanese</option>
+                    <option value="programming" {% if (category or '') == 'programming' %}selected{% endif %}>Programming</option>
+                </select>
             </div>
 
             <div class="flex items-center justify-between pt-4">

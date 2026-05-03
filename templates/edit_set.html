@@ -38,6 +38,16 @@
                           placeholder="Describe what this set contains...">{{ request.form.get('description', flashcard_set.description) }}</textarea>
             </div>
 
+            <div class="form-group">
+                <label for="category" class="form-label">Category</label>
+                {% set current_category = request.form.get('category', flashcard_set.get('category', 'general')) %}
+                <select id="category" name="category" class="form-input">
+                    <option value="general"     {% if current_category == 'general'     %}selected{% endif %}>General</option>
+                    <option value="japanese"    {% if current_category == 'japanese'    %}selected{% endif %}>Japanese</option>
+                    <option value="programming" {% if current_category == 'programming' %}selected{% endif %}>Programming</option>
+                </select>
+            </div>
+
             <div class="flex items-center justify-between pt-4">
                 <a href="{{ url_for('view_set', set_id=flashcard_set.id) }}"
                    class="btn btn-secondary">

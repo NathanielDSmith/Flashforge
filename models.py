@@ -1,162 +1,204 @@
-import json
-import os
+import sqlite3
+from contextlib import contextmanager
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Generator, List, Optional, Tuple
+
+
+def _dict_factory(cursor: sqlite3.Cursor, row: tuple) -> Dict:
+    return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
 
 
 class FlashcardManager:
-    def __init__(self, data_file: str):
-        self.data_file = data_file
-    
+    def __init__(self, db_path: str):
+        self.db_path = db_path
+        self._init_db()
+
+    # ── Connection ────────────────────────────────────────────────
+
+    @contextmanager
+    def _db(self) -> Generator[sqlite3.Connection, None, None]:
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = _dict_factory
+        conn.execute('PRAGMA foreign_keys = ON')
+        try:
+            yield conn
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            conn.close()
+
+    def _init_db(self) -> None:
+        with self._db() as conn:
+            conn.executescript("""
+                CREATE TABLE IF NOT EXISTS flashcard_sets (
+                    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title       TEXT    NOT NULL,
+                    description TEXT    NOT NULL DEFAULT '',
+                    category    TEXT    NOT NULL DEFAULT 'general',
+                    created_at  TEXT    NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS flashcards (
+                    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                    set_id     INTEGER NOT NULL REFERENCES flashcard_sets(id) ON DELETE CASCADE,
+                    question   TEXT    NOT NULL,
+                    answer     TEXT    NOT NULL,
+                    favorite   INTEGER NOT NULL DEFAULT 0,
+                    created_at TEXT    NOT NULL
+                );
+            """)
+
+    # ── Internal helpers ──────────────────────────────────────────
+
+    def _get_cards_for_set(self, conn: sqlite3.Connection, set_id: int) -> List[Dict]:
+        rows = conn.execute(
+            'SELECT * FROM flashcards WHERE set_id = ? ORDER BY id', (set_id,)
+        ).fetchall()
+        for row in rows:
+            row['favorite'] = bool(row['favorite'])
+        return rows
+
+    def _row_to_set(self, conn: sqlite3.Connection, row: Dict) -> Dict:
+        row['cards'] = self._get_cards_for_set(conn, row['id'])
+        return row
+
+    # ── Public interface ──────────────────────────────────────────
+
     def load_data(self) -> Dict:
-        try:
-            if os.path.exists(self.data_file):
-                with open(self.data_file, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-        except (json.JSONDecodeError, IOError) as e:
-            print(f"Error loading data: {e}")
-        return {'sets': []}
-    
-    def save_data(self, data: Dict) -> bool:
-        try:
-            with open(self.data_file, 'w', encoding='utf-8') as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-            return True
-        except IOError as e:
-            print(f"Error saving data: {e}")
-            return False
-    
-    def get_next_id(self, items: List) -> int:
-        return max([item.get('id', 0) for item in items], default=0) + 1
-    
+        with self._db() as conn:
+            sets = conn.execute(
+                'SELECT * FROM flashcard_sets ORDER BY id'
+            ).fetchall()
+            for s in sets:
+                s['cards'] = self._get_cards_for_set(conn, s['id'])
+            return {'sets': sets}
+
     def find_set_by_id(self, set_id: int) -> Optional[Dict]:
-        data = self.load_data()
-        return next((s for s in data['sets'] if s['id'] == set_id), None)
-    
+        with self._db() as conn:
+            row = conn.execute(
+                'SELECT * FROM flashcard_sets WHERE id = ?', (set_id,)
+            ).fetchone()
+            if row is None:
+                return None
+            return self._row_to_set(conn, row)
+
     def find_card_by_id(self, flashcard_set: Dict, card_id: int) -> Optional[Dict]:
         return next((c for c in flashcard_set['cards'] if c['id'] == card_id), None)
-    
-    def create_set(self, title: str, description: str = '') -> Optional[Dict]:
-        data = self.load_data()
-        new_set = {
-            'id': self.get_next_id(data['sets']),
-            'title': title,
-            'description': description,
-            'created_at': datetime.now().isoformat(),
-            'cards': []
-        }
-        data['sets'].append(new_set)
-        
-        if self.save_data(data):
-            return new_set
-        return None
-    
-    def add_card(self, set_id: int, question: str, answer: str) -> Optional[Dict]:
-        data = self.load_data()
-        
-        flashcard_set = None
-        for set_item in data['sets']:
-            if set_item['id'] == set_id:
-                flashcard_set = set_item
-                break
-        
-        if not flashcard_set:
-            return None
-        
-        new_card = {
-            'id': self.get_next_id(flashcard_set['cards']),
-            'question': question,
-            'answer': answer,
-            'favorite': False,
-            'created_at': datetime.now().isoformat()
-        }
-        flashcard_set['cards'].append(new_card)
-        
-        if self.save_data(data):
-            return new_card
-        return None
-    
-    def update_set(self, set_id: int, title: str, description: str = '') -> bool:
-        data = self.load_data()
-        for set_item in data['sets']:
-            if set_item['id'] == set_id:
-                set_item['title'] = title
-                set_item['description'] = description
-                return self.save_data(data)
-        return False
+
+    def create_set(self, title: str, description: str = '', category: str = 'general') -> Optional[Dict]:
+        created_at = datetime.now().isoformat()
+        with self._db() as conn:
+            cursor = conn.execute(
+                'INSERT INTO flashcard_sets (title, description, category, created_at) VALUES (?, ?, ?, ?)',
+                (title, description, category, created_at)
+            )
+            return {
+                'id': cursor.lastrowid,
+                'title': title,
+                'description': description,
+                'category': category,
+                'created_at': created_at,
+                'cards': [],
+            }
+
+    def update_set(self, set_id: int, title: str, description: str = '', category: str = 'general') -> bool:
+        with self._db() as conn:
+            cursor = conn.execute(
+                'UPDATE flashcard_sets SET title = ?, description = ?, category = ? WHERE id = ?',
+                (title, description, category, set_id)
+            )
+            return cursor.rowcount > 0
 
     def delete_set(self, set_id: int) -> bool:
-        data = self.load_data()
-        original_count = len(data['sets'])
-        data['sets'] = [s for s in data['sets'] if s['id'] != set_id]
-        
-        if len(data['sets']) < original_count:
-            return self.save_data(data)
-        return False
-    
+        with self._db() as conn:
+            cursor = conn.execute('DELETE FROM flashcard_sets WHERE id = ?', (set_id,))
+            return cursor.rowcount > 0
+
+    def add_card(self, set_id: int, question: str, answer: str) -> Optional[Dict]:
+        created_at = datetime.now().isoformat()
+        with self._db() as conn:
+            exists = conn.execute(
+                'SELECT id FROM flashcard_sets WHERE id = ?', (set_id,)
+            ).fetchone()
+            if not exists:
+                return None
+            cursor = conn.execute(
+                'INSERT INTO flashcards (set_id, question, answer, favorite, created_at) VALUES (?, ?, ?, 0, ?)',
+                (set_id, question, answer, created_at)
+            )
+            return {
+                'id': cursor.lastrowid,
+                'set_id': set_id,
+                'question': question,
+                'answer': answer,
+                'favorite': False,
+                'created_at': created_at,
+            }
+
+    def update_card(self, set_id: int, card_id: int, question: str, answer: str) -> bool:
+        with self._db() as conn:
+            cursor = conn.execute(
+                'UPDATE flashcards SET question = ?, answer = ? WHERE id = ? AND set_id = ?',
+                (question, answer, card_id, set_id)
+            )
+            return cursor.rowcount > 0
+
     def delete_card(self, set_id: int, card_id: int) -> bool:
-        data = self.load_data()
-        
-        flashcard_set = None
-        for set_item in data['sets']:
-            if set_item['id'] == set_id:
-                flashcard_set = set_item
-                break
-        
-        if not flashcard_set:
-            return False
-        
-        original_count = len(flashcard_set['cards'])
-        flashcard_set['cards'] = [c for c in flashcard_set['cards'] if c['id'] != card_id]
-        
-        if len(flashcard_set['cards']) < original_count:
-            return self.save_data(data)
-        return False
-    
+        with self._db() as conn:
+            cursor = conn.execute(
+                'DELETE FROM flashcards WHERE id = ? AND set_id = ?', (card_id, set_id)
+            )
+            return cursor.rowcount > 0
+
     def toggle_favorite(self, set_id: int, card_id: int) -> Tuple[bool, bool]:
-        data = self.load_data()
-        
-        flashcard_set = None
-        target_card = None
-        
-        for set_item in data['sets']:
-            if set_item['id'] == set_id:
-                flashcard_set = set_item
-                for card in set_item['cards']:
-                    if card['id'] == card_id:
-                        target_card = card
-                        break
-                break
-        
-        if not flashcard_set or not target_card:
-            return False, False
-        
-        target_card['favorite'] = not target_card.get('favorite', False)
-        
-        if self.save_data(data):
-            return True, target_card['favorite']
-        return False, False
-    
+        with self._db() as conn:
+            row = conn.execute(
+                'SELECT favorite FROM flashcards WHERE id = ? AND set_id = ?',
+                (card_id, set_id)
+            ).fetchone()
+            if row is None:
+                return False, False
+            new_value = 0 if row['favorite'] else 1
+            conn.execute(
+                'UPDATE flashcards SET favorite = ? WHERE id = ? AND set_id = ?',
+                (new_value, card_id, set_id)
+            )
+            return True, bool(new_value)
+
     def get_favorite_cards(self) -> List[Dict]:
-        data = self.load_data()
-        favorite_cards = []
-        
-        for flashcard_set in data['sets']:
-            for card in flashcard_set['cards']:
-                if card.get('favorite', False):
-                    favorite_cards.append({
-                        'card': card,
-                        'set': {
-                            'id': flashcard_set['id'],
-                            'title': flashcard_set['title']
-                        }
-                    })
-        
-        return favorite_cards
-    
+        with self._db() as conn:
+            rows = conn.execute("""
+                SELECT
+                    f.id, f.question, f.answer, f.favorite, f.created_at,
+                    s.id    AS set_id,
+                    s.title AS set_title
+                FROM flashcards f
+                JOIN flashcard_sets s ON s.id = f.set_id
+                WHERE f.favorite = 1
+                ORDER BY s.id, f.id
+            """).fetchall()
+            return [
+                {
+                    'card': {
+                        'id':         row['id'],
+                        'question':   row['question'],
+                        'answer':     row['answer'],
+                        'favorite':   bool(row['favorite']),
+                        'created_at': row['created_at'],
+                    },
+                    'set': {
+                        'id':    row['set_id'],
+                        'title': row['set_title'],
+                    },
+                }
+                for row in rows
+            ]
+
     def get_favorite_count(self) -> int:
-        data = self.load_data()
-        return sum(
-            sum(1 for card in flashcard_set['cards'] if card.get('favorite', False))
-            for flashcard_set in data['sets']
-        ) 
+        with self._db() as conn:
+            row = conn.execute(
+                'SELECT COUNT(*) AS n FROM flashcards WHERE favorite = 1'
+            ).fetchone()
+            return row['n']
