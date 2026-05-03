@@ -1,45 +1,47 @@
 import os
-from typing import Dict, Any
+
 
 class Config:
-    """Base configuration class"""
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here'
-    DATA_FILE = os.environ.get('DATA_FILE') or 'flashcards.json'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-only-secret-do-not-use-in-production'
+    DATA_FILE = os.environ.get('DATA_FILE') or 'flashcards.db'
     DEBUG = os.environ.get('FLASK_DEBUG', 'True').lower() == 'true'
-    
-    # Validation settings
+
     MAX_TITLE_LENGTH = 100
     MAX_DESCRIPTION_LENGTH = 500
     MAX_QUESTION_LENGTH = 1000
     MAX_ANSWER_LENGTH = 1000
-    
-    # UI settings
-    CARDS_PER_PAGE = 12
-    STUDY_MODE_ENABLED = True
-    
+
     @staticmethod
     def init_app(app):
-        """Initialize application with configuration"""
         pass
 
+
 class DevelopmentConfig(Config):
-    """Development configuration"""
     DEBUG = True
 
+
 class ProductionConfig(Config):
-    """Production configuration"""
     DEBUG = False
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard-to-guess-string'
+
+    @classmethod
+    def init_app(cls, app):
+        secret = os.environ.get('SECRET_KEY')
+        if not secret:
+            raise RuntimeError(
+                'SECRET_KEY environment variable must be set in production. '
+                'Generate one with: python -c "import secrets; print(secrets.token_hex(32))"'
+            )
+        cls.SECRET_KEY = secret
+
 
 class TestingConfig(Config):
-    """Testing configuration"""
     TESTING = True
-    DATA_FILE = 'test_flashcards.json'
+    DATA_FILE = 'test_flashcards.db'
 
-# Configuration dictionary
+
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
     'testing': TestingConfig,
-    'default': DevelopmentConfig
-} 
+    'default': DevelopmentConfig,
+}
