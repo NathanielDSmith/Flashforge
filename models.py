@@ -13,8 +13,6 @@ class FlashcardManager:
         self.db_path = db_path
         self._init_db()
 
-    # ── Connection ────────────────────────────────────────────────
-
     @contextmanager
     def _db(self) -> Generator[sqlite3.Connection, None, None]:
         conn = sqlite3.connect(self.db_path)
@@ -50,8 +48,6 @@ class FlashcardManager:
                 );
             """)
 
-    # ── Internal helpers ──────────────────────────────────────────
-
     def _get_cards_for_set(self, conn: sqlite3.Connection, set_id: int) -> List[Dict]:
         rows = conn.execute(
             'SELECT * FROM flashcards WHERE set_id = ? ORDER BY id', (set_id,)
@@ -63,8 +59,6 @@ class FlashcardManager:
     def _row_to_set(self, conn: sqlite3.Connection, row: Dict) -> Dict:
         row['cards'] = self._get_cards_for_set(conn, row['id'])
         return row
-
-    # ── Public interface ──────────────────────────────────────────
 
     def load_data(self) -> Dict:
         with self._db() as conn:

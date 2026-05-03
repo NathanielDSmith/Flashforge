@@ -14,7 +14,6 @@ class FlashForgeTestCase(unittest.TestCase):
 
         self.flashcard_manager = FlashcardManager(self.db_path)
 
-        # Inject the test DB into the running app's manager
         self._orig_manager = app_module.flashcard_manager
         app_module.flashcard_manager = self.flashcard_manager
 
